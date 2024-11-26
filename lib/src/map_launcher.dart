@@ -35,10 +35,19 @@ class MapLauncher {
       zoom: zoom,
       extraParams: extraParams,
     );
+    final String fallbackUrl = getMapMarkerFallbackUrl(
+      mapType: mapType,
+      coords: coords,
+      title: title,
+      description: description,
+      zoom: zoom,
+      extraParams: extraParams,
+    );
 
     final Map<String, String?> args = {
       'mapType': Utils.enumToString(mapType),
       'url': Uri.encodeFull(url),
+      'fallbackUrl': Uri.encodeFull(fallbackUrl),
       'title': title,
       'description': description,
       'latitude': coords.latitude.toString(),
@@ -70,9 +79,21 @@ class MapLauncher {
       extraParams: extraParams,
     );
 
+    final fallbackUrl = getMapDirectionsFallbackUrl(
+      mapType: mapType,
+      destination: destination,
+      destinationTitle: destinationTitle,
+      origin: origin,
+      originTitle: originTitle,
+      waypoints: waypoints,
+      directionsMode: directionsMode,
+      extraParams: extraParams,
+    );
+
     final Map<String, dynamic> args = {
       'mapType': Utils.enumToString(mapType),
       'url': Uri.encodeFull(url),
+      'fallbackUrl': Uri.encodeFull(fallbackUrl),
       'destinationTitle': destinationTitle,
       'destinationLatitude': destination.latitude.toString(),
       'destinationLongitude': destination.longitude.toString(),

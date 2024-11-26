@@ -4,6 +4,40 @@ import 'package:map_launcher/src/models.dart';
 import 'package:map_launcher/src/utils.dart';
 
 /// Returns a url that is used by [showDirections]
+String getMapDirectionsFallbackUrl({
+  required MapType mapType,
+  required Coords destination,
+  String? destinationTitle,
+  Coords? origin,
+  String? originTitle,
+  DirectionsMode? directionsMode,
+  List<Waypoint>? waypoints,
+  Map<String, String>? extraParams,
+}) {
+  switch (mapType) {
+    case MapType.neshan:
+      return 'https://maps.neshan.org/@${destination.latitude},${destination.longitude}/routing/car/destination/${destination.latitude},${destination.longitude}';
+    case MapType.balad:
+      return Utils.buildUrl(
+        url: 'https://balad.ir/directions/driving',
+        queryParams: {
+          'destination': '${destination.latitude},${destination.longitude}',
+        },
+      );
+    default:
+      return getMapDirectionsUrl(
+        mapType: MapType.google,
+        destination: destination,
+        destinationTitle: destinationTitle,
+        directionsMode: directionsMode,
+        extraParams: extraParams,
+        origin: origin,
+        originTitle: originTitle,
+        waypoints: waypoints,
+      );
+  }
+}
+
 String getMapDirectionsUrl({
   required MapType mapType,
   required Coords destination,
@@ -411,6 +445,38 @@ String getMapDirectionsUrl({
           'places': query,
           'viaPoints': viaPoints,
           'mode': mode,
+        },
+      );
+
+    case MapType.neshan:
+      if (Platform.isIOS) {
+        return Utils.buildUrl(
+          url: 'neshan://',
+          queryParams: {
+            'll': '${destination.latitude},${destination.longitude}',
+            // 'lat': "${destination.latitude}",
+            // 'lng': "${destination.longitude}",
+          },
+        );
+      }
+      return 'https://maps.neshan.org/@${destination.latitude},${destination.longitude}/routing/car/destination/${destination.latitude},${destination.longitude}';
+
+    case MapType.balad:
+      if (Platform.isIOS) {
+        return Utils.buildUrl(
+          url: 'balad://',
+          queryParams: {
+            'll': '${destination.latitude},${destination.longitude}',
+          },
+        );
+      }
+      if (Platform.isAndroid) {
+        return 'https://nshn.ir/@${destination.latitude},${destination.longitude}/routing/car/destination/${destination.latitude},${destination.longitude}';
+      }
+      return Utils.buildUrl(
+        url: 'https://balad.ir/directions/driving',
+        queryParams: {
+          'destination': '${destination.latitude},${destination.longitude}',
         },
       );
   }

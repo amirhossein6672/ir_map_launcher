@@ -4,6 +4,8 @@ import MapKit
 
 
 private enum MapType: String {
+    case neshan
+    case balad
     case apple
     case google
     case amap
@@ -53,6 +55,8 @@ private class Map {
 }
 
 private let maps: [Map] = [
+    Map(mapName: "Neshan", mapType: MapType.neshan, urlPrefix: "https://neshan.org/"),
+    Map(mapName: "Balad", mapType: MapType.balad, urlPrefix: "https://balad.ir/"),
     Map(mapName: "Apple Maps", mapType: MapType.apple, urlPrefix: ""),
     Map(mapName: "Google Maps", mapType: MapType.google, urlPrefix: "comgooglemaps://"),
     Map(mapName: "Amap", mapType: MapType.amap, urlPrefix: "iosamap://"),
@@ -111,7 +115,7 @@ private func getDirectionsMode(directionsMode: String?) -> String {
     }
 }
 
-private func showMarker(mapType: MapType, url: String, title: String, latitude: String, longitude: String) {
+private func showMarker(mapType: MapType, url: String, fallbackUrl: String?, title: String, latitude: String, longitude: String) {
     switch mapType {
     case MapType.apple:
         let coordinate = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
@@ -129,7 +133,7 @@ private func showMarker(mapType: MapType, url: String, title: String, latitude: 
     }
 }
 
-private func showDirections(mapType: MapType, url: String, destinationTitle: String?, destinationLatitude: String, destinationLongitude: String, originTitle: String?, originLatitude: String?, originLongitude: String?, directionsMode: String?, waypoints: [[String: String?]]?) {
+private func showDirections(mapType: MapType, url: String, fallbackUrl: String?, destinationTitle: String?, destinationLatitude: String, destinationLongitude: String, originTitle: String?, originLatitude: String?, originLongitude: String?, directionsMode: String?, waypoints: [[String: String?]]?) {
     switch mapType {
     case MapType.apple:
 
@@ -151,8 +155,11 @@ private func showDirections(mapType: MapType, url: String, destinationTitle: Str
             launchOptions: [MKLaunchOptionsDirectionsModeKey: getDirectionsMode(directionsMode: directionsMode)]
         )
     default:
-        UIApplication.shared.open(URL(string:url)!, options: [:], completionHandler: nil)
-
+        if UIApplication.shared.canOpenURL(URL(string:url)!) {
+            UIApplication.shared.open(URL(string:url)!, options: [:], completionHandler: nil)
+        }else{
+            UIApplication.shared.open(URL(string:fallbackUrl!)!, options: [:], completionHandler: nil)
+        }
     }
 }
 
@@ -185,6 +192,7 @@ public class SwiftMapLauncherPlugin: NSObject, FlutterPlugin {
             let args = call.arguments as! NSDictionary
             let mapType = args["mapType"] as! String
             let url = args["url"] as! String
+            let fallbackUrl = args["fallbackUrl"] as? String
             let title = args["title"] as! String
             let latitude = args["latitude"] as! String
             let longitude = args["longitude"] as! String
@@ -195,13 +203,14 @@ public class SwiftMapLauncherPlugin: NSObject, FlutterPlugin {
                 return;
             }
 
-            showMarker(mapType: MapType(rawValue: mapType)!, url: url, title: title, latitude: latitude, longitude: longitude)
+            showMarker(mapType: MapType(rawValue: mapType)!, url: url, fallbackUrl: fallbackUrl, title: title, latitude: latitude, longitude: longitude)
             result(nil)
 
         case "showDirections":
             let args = call.arguments as! NSDictionary
             let mapType = args["mapType"] as! String
             let url = args["url"] as! String
+            let fallbackUrl = args["fallbackUrl"] as? String
 
             let destinationTitle = args["destinationTitle"] as? String
             let destinationLatitude = args["destinationLatitude"] as! String
@@ -224,6 +233,7 @@ public class SwiftMapLauncherPlugin: NSObject, FlutterPlugin {
             showDirections(
                 mapType: MapType(rawValue: mapType)!,
                 url: url,
+                fallbackUrl: fallbackUrl,
                 destinationTitle: destinationTitle,
                 destinationLatitude: destinationLatitude,
                 destinationLongitude: destinationLongitude,

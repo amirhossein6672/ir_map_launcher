@@ -43,6 +43,8 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+			<string>balad</string>
+			<string>neshan</string>
 			<string>comgooglemaps</string>
 			<string>baidumap</string>
 			<string>iosamap</string>

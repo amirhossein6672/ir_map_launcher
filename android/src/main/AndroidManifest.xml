@@ -28,6 +28,8 @@
         <package android:name="com.skt.tmap.ku" />
         <package android:name="cz.seznam.mapy" />
         <package android:name="com.mmi.maps" />
+        <package android:name="org.rajman.neshan.traffic.tehran.navigator" />
+        <package android:name="ir.balad" />
     </queries>
 
 </manifest>

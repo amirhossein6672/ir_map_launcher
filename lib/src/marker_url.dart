@@ -4,6 +4,31 @@ import 'package:map_launcher/src/models.dart';
 import 'package:map_launcher/src/utils.dart';
 
 /// Returns a url that is used by [showMarker]
+String getMapMarkerFallbackUrl({
+  required MapType mapType,
+  required Coords coords,
+  String? title,
+  String? description,
+  int? zoom,
+  Map<String, String>? extraParams,
+}) {
+  switch (mapType) {
+    case MapType.neshan:
+      return 'https://maps.neshan.org/@${coords.latitude},${coords.longitude}';
+    case MapType.balad:
+      return 'https://nshn.ir/@${coords.latitude},${coords.longitude}';
+    default:
+      return getMapMarkerUrl(
+        mapType: MapType.google,
+        coords: coords,
+        title: title,
+        description: description,
+        zoom: zoom,
+        extraParams: extraParams,
+      );
+  }
+}
+
 String getMapMarkerUrl({
   required MapType mapType,
   required Coords coords,
@@ -343,5 +368,11 @@ String getMapMarkerUrl({
             'https://www.mappls.com/location/${coords.latitude},${coords.longitude}',
         queryParams: {},
       );
+
+    case MapType.neshan:
+      return 'https://maps.neshan.org/@${coords.latitude},${coords.longitude}';
+
+    case MapType.balad:
+      return 'https://nshn.ir/@${coords.latitude},${coords.longitude}';
   }
 }
