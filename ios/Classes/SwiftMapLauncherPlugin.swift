@@ -4,8 +4,6 @@ import MapKit
 
 
 private enum MapType: String {
-    case neshan
-    case balad
     case apple
     case google
     case amap
@@ -55,8 +53,6 @@ private class Map {
 }
 
 private let maps: [Map] = [
-    Map(mapName: "Neshan", mapType: MapType.neshan, urlPrefix: "https://neshan.org/"),
-    Map(mapName: "Balad", mapType: MapType.balad, urlPrefix: "https://balad.ir/"),
     Map(mapName: "Apple Maps", mapType: MapType.apple, urlPrefix: ""),
     Map(mapName: "Google Maps", mapType: MapType.google, urlPrefix: "comgooglemaps://"),
     Map(mapName: "Amap", mapType: MapType.amap, urlPrefix: "iosamap://"),

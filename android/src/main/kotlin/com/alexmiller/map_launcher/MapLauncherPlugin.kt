@@ -13,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-private enum class MapType { google, googleGo, amap, baidu, waze, yandexNavi, yandexMaps, citymapper, osmand, osmandplus, doubleGis, tencent, here, petal, tomtomgo, copilot, sygicTruck, tomtomgofleet, flitsmeister, truckmeister, naver, kakao, tmap, mapyCz, mappls, neshan, balad }
+private enum class MapType { google, googleGo, amap, baidu, waze, yandexNavi, yandexMaps, citymapper, osmand, osmandplus, doubleGis, tencent, here, petal, tomtomgo, copilot, sygicTruck, tomtomgofleet, flitsmeister, truckmeister, naver, kakao, tmap, mapyCz, mappls }
 
 private class MapModel(val mapType: MapType, val mapName: String, val packageName: String, val urlPrefix: String) {
     fun toMap(): Map<String, String> {
@@ -32,8 +32,6 @@ class MapLauncherPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private val maps = listOf(
-            MapModel(MapType.neshan, "Neshan", "org.rajman.neshan.traffic.tehran.navigator", "neshan://"),
-            MapModel(MapType.balad, "Balad", "ir.balad", "balad://"),
             MapModel(MapType.google, "Google Maps", "com.google.android.apps.maps", "geo://"),
             MapModel(MapType.googleGo, "Google Maps Go", "com.google.android.apps.mapslite", "geo://"),
             MapModel(MapType.amap, "Amap", "com.autonavi.minimap", "iosamap://"),

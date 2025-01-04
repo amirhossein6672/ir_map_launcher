@@ -89,12 +89,6 @@ enum MapType {
 
   // MAPPLS MapmyIndia
   mappls,
-
-  // Balad
-  balad,
-
-  /// Neshan
-  neshan,
 }
 
 /// Defines the supported modes of transportation for [showDirections]
